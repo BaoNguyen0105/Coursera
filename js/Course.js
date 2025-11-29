@@ -15,6 +15,7 @@ class Course{
     static status='';
     static teacher_name='';
     static partner_name='';
+    static revenue=0;
 
     static display(){
         const mainInfo=document.getElementById('main-info');
@@ -82,7 +83,10 @@ class Course{
             <p class="title">Status:</p>
             <p class="value">${this.status}</p>
         </div>
-        
+        <div>
+            <p class="title">Revenue:</p>
+            <p class="value">${this.revenue} USD</p>
+        </div>
         `;
     }
     
@@ -111,10 +115,16 @@ class Course{
                 this.teacher_name = item.Teacher_Name || '';
                 this.partner_name = '';
             }
+
+            const revenueRes = await fetch(`http://localhost:3000/api/courses/${encodeURIComponent(id)}/revenue`);
+            if (!revenueRes.ok) throw new Error(`Server responded ${revenueRes.status} for revenue`);
+            const revenueData = await revenueRes.json();
+            this.revenue = revenueData.total_revenue;
         } catch (error) {
             console.error('Error:', error);
             alert('Failed to load course details: ' + error.message);
         }
+
     }
 
     static disable(id){
