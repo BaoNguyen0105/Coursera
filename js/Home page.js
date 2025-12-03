@@ -94,10 +94,15 @@ class CourseTable {
                             if (!CourseID) throw new Error('No CourseID returned from create API');
 
                             // 2) Update course with details (PUT)
+                            let priceValue = '';
+                            if (price !== '') {
+                                const num = parseFloat(price);
+                                if (!isNaN(num)) priceValue = (num === 0) ? 'FREE' : `${num} USD`;
+                            }
                             const putBody = {
                                 language,
                                 description,
-                                price: Number(price),
+                                price: priceValue,
                                 level,
                                 duration,
                                 specialization,
